@@ -13,4 +13,5 @@ urlpatterns = [
     path('delete_profile/<int:pk>', UserDelete.as_view(), name='delete'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('historylist/', HistoryList.as_view(), name='history'),
+    path('edit_profile/', EditProfile.as_view(), name='edit')
 ]

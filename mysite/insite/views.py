@@ -1,5 +1,5 @@
-from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
+from django.db import transaction
 from django.db.models import Sum, F, FloatField
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models.functions import Cast
@@ -15,7 +15,7 @@ from .forms import *
 class Registration(CreateView):
     form_class = RegistrationForm
     template_name = 'admin/registration.html'
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('index')
 
     def registration(self):
         return render(self, 'admin/registration.html')
@@ -27,8 +27,8 @@ class LoginViewMy(LoginView):
 
 class Profile(UpdateView):
     model = User
-    fields = ['name', 'surname', 'mail', 'avatar']
-    success_url = reverse_lazy('index')
+    fields = ['username','name', 'surname', 'mail', 'avatar']
+    success_url = reverse_lazy('profile')
     template_name = 'admin/profile.html'
 
 class UserDelete(DeleteView):
@@ -107,3 +107,35 @@ class HistoryList(generic.ListView):
     model = Question
     template_name = 'historylist.html'
     context_object_name = 'list'
+
+class EditProfile(UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    template_name = 'edit.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Редактирование профиля пользователя: {self.request.user.username}'
+        if self.request.POST:
+            context['user_form'] = ProfileForm(self.request.POST, instance=self.request.user)
+        else:
+            context['user_form'] = ProfileForm(instance=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        user_form = context['user_form']
+        with transaction.atomic():
+            if all([form.is_valid(), user_form.is_valid()]):
+                user_form.save()
+                form.save()
+            else:
+                context.update({'user_form': user_form})
+                return self.render_to_response(context)
+        return super(EditProfile, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('profile', kwargs={'pk': self.object.pk})

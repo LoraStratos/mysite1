@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Профиль {{ user_object.surname }}</h1>
-    <h2>{{ user_object.first_name }} {{ user_object.last_name }}</h2>
-    {% if user_object.image %}
-        <img style="width: 300px; height: 300px;" src="{{ user_object.image.url }}" alt="Аватарка пользователя">
+    <h1>Профиль {{ user.username }}</h1>
+    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+    {% if user.avatar %}
+        <img style="width: 300px; height: 300px;" src="{{ user.avatar.url }}" alt="Аватарка пользователя"><br><br>
     {% endif %}
-    <p>E-mail: {{ user_object.mail }}</p>
-    <br><br>
+    <p>E-mail: {{ user.mail }}</p>
     <hr>
     <br><br>
+    <a href="{% url 'edit' %}">Редактировать профиль</a><br><br>
     <a href="{% url 'delete' user.pk %}" style="color: red;">Удалить себя</a>
 {% endblock %}

@@ -2,17 +2,19 @@
 
 {% block content %}
     {% if user.avatar %}
-        <img src="{{ user.avatar.url }}" alt="Аватарка" style="width: 50px; height: 50px;">
+    <div style="display: flex;">
+        <img src="{{ user.avatar.url }}" alt="Аватарка" style="width: 50px; height: 50px; margin-right: 20px">
         <h3>{{ user.username }}</h3>
+    </div>
     {% endif %}
 
     {% if latest_question_list %}
         {% if user.is_superuser %}
-            <h3>Здравствуйте {{ user.username|upper}}</h3>
+            <h3>Здравствуйте {{ user.username }}</h3>
         {% else %}
         <ul>
             {% for question in latest_question_list %}
-                <li><a href="{% url 'detail' question.id %}">{{question.question_text}}</a></li>
+                <li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
             {% endfor %}
         </ul>
         {% endif %}
