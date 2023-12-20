@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Профиль {{ user_object.surname }}</h1>
+    <h2>{{ user_object.first_name }} {{ user_object.last_name }}</h2>
+    {% if user_object.image %}
+        <img style="width: 300px; height: 300px;" src="{{ user_object.image.url }}" alt="Аватарка пользователя">
+    {% endif %}
+    <p>E-mail: {{ user_object.mail }}</p>
+    <br><br>
+    <hr>
+    <br><br>
+    <a href="{% url 'delete' user.pk %}" style="color: red;">Удалить себя</a>
+{% endblock %}

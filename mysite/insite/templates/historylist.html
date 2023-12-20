@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>История опросов</h2>
+    <h2>Список всех опросов которые были проведены или проводятся:</h2>
+    {% for i in lst %}
+        <div><a href="{% url 'results' i.pk %}">{{ i.question_text }}</a>Опубликовано: {{ i.pub_date }}</div>
+    {% endfor %}
+{% endblock %}

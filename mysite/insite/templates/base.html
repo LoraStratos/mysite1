@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body style="display: flex;">
+    <div style="margin: 20px 20px 0 40px;">
+            {% if user.is_superuser %}
+                <a href="{% url 'index' %}" style="color:black;">Главная</a><br>
+                <a href="{% url 'profile' user.pk %}" style="color:black;">Личный кабинет</a><br>
+                <a href="{% url 'history'  %}" style="color:black;">История опросов</a><br>
+                <a href="{% url 'logout' %}" style="color:black;">Выйти</a>
+            {% elif user.is_authenticated %}
+                <a href="{% url 'index' %}" style="color:black;">Главная</a><br>
+                <a href="{% url 'profile' user.pk %}" style="color:black;">Личный кабинет</a><br>
+                <a href="{% url 'logout' %}" style="color:black;">Выйти</a>
+            {% else %}
+                <a href="{% url 'index' %}" style="color:black;">Главная</a><br>
+                <a href="{% url 'registration' %}" style="color:black;">Зарегистрироваться</a><br>
+                <a href="{% url 'login' %}" style="color:black;">Войти</a>
+            {% endif %}
+    </div>
+    <div style="margin-top: 20px;">
+        {% block content %}{% endblock %}
+    </div>
+</body>
